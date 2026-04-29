@@ -5,7 +5,7 @@ spring:
   application:
     name: orders-service
   datasource:
-    url: jdbc:mysql://localhost:3306/orders_db_dev
+    url: jdbc:mysql://localhost:3304/orders_db_dev
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
