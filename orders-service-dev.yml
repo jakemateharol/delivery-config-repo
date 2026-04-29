@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3304/orders_db_dev
     username: root
-    password: root
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
