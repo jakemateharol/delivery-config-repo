@@ -5,7 +5,7 @@ spring:
   application:
     name: orders-service
   datasource:
-    url: jdbc:mysql://localhost:3304/orders_db_dev
+    url: jdbc:mysql://mysql-db:3306/orders_db_dev
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,4 +17,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://registry-server:8761/eureka/
