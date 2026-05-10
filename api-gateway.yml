@@ -1,0 +1,13 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://registry-server:8761/eureka/
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: orders-service
+          uri: lb://orders-service
+          predicates:
+            - Path=/api/orders/**
