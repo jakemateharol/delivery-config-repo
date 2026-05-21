@@ -11,3 +11,22 @@ spring:
           uri: lb://orders-service
           predicates:
             - Path=/api/orders/**
+            filters:
+            # Esto le dice al gateway: "Si orders falla, ve a la ruta de emergencia"
+            - name: CircuitBreaker
+              args:
+                name: ordersCircuitBreaker
+                fallbackUri: forward:/fallback/orders
+
+# Esto configura las reglas del disyuntor
+resilience4j:
+  circuitbreaker:
+    instances:
+      ordersCircuitBreaker:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+  timelimiter:
+    instances:
+      ordersCircuitBreaker:
+        timeoutDuration: 2s
