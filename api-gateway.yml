@@ -1,24 +1,30 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://registry-server:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 spring:
   cloud:
     gateway:
       routes:
+        # --- RUTA PARA ÓRDENES ---
         - id: orders-service
           uri: lb://orders-service
           predicates:
             - Path=/api/orders/**
-            filters:
-            # Esto le dice al gateway: "Si orders falla, ve a la ruta de emergencia"
+          filters:
             - name: CircuitBreaker
               args:
                 name: ordersCircuitBreaker
                 fallbackUri: forward:/fallback/orders
 
-# Esto configura las reglas del disyuntor
+        # --- RUTA PARA USUARIOS (Tu nuevo servicio) ---
+        - id: users-service
+          uri: lb://users-service
+          predicates:
+            - Path=/api/users/**
+
+# Configuración del Disyuntor (Circuit Breaker) para Órdenes
 resilience4j:
   circuitbreaker:
     instances:
