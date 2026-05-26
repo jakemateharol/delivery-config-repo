@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3304/delivery_users_db?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
-    password: # <-- Pon tu contraseña de MySQL aquí si tienes una
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
