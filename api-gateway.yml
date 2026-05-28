@@ -24,6 +24,11 @@ spring:
           predicates:
             - Path=/api/users/**
 
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/dishes/**   
+
 # Configuración del Disyuntor (Circuit Breaker) para Órdenes
 resilience4j:
   circuitbreaker:
