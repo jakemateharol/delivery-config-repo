@@ -1,11 +1,9 @@
 server:
-  port: 8084 # 🎯 Cambiado para que no choque con usuarios
+  port: 8084
 
 spring:
-  application:
-    name: orders-service
   datasource:
-    url: jdbc:mysql://localhost:3306/orders_db_dev?createDatabaseIfNotExist=true # 🎯 Localhost para tu CMD
+    url: jdbc:mysql://localhost:3306/orders_db_dev?createDatabaseIfNotExist=true
     username: root
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,4 +15,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/ # 🎯 Localhost para tu Eureka local
+      defaultZone: http://localhost:8761/eureka/
