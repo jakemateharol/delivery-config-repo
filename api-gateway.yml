@@ -13,26 +13,33 @@ spring:
           predicates:
             - Path=/api/orders/**
           filters:
+            - JwtAuthenticationFilter # 👈 ¡NUEVO: Nadie compra sin Token!
             - name: CircuitBreaker
               args:
                 name: ordersCircuitBreaker
                 fallbackUri: forward:/fallback/orders
 
-        # --- RUTA PARA USUARIOS (Tu nuevo servicio) ---
+        # --- RUTA PARA USUARIOS (Login/Registro) ---
         - id: users-service
           uri: lb://users-service
           predicates:
             - Path=/api/users/**
+          # No lleva filtro aquí para que el Login y Registro sigan siendo públicos
 
         # --- RUTA PARA INVENTARIO ---
         - id: inventory-service
           uri: lb://inventory-service
           predicates:
-            - Path=/api/dishes/** # 💳 --- NUEVA RUTA PARA PAGOS ---
+            - Path=/api/dishes/** filters:
+            - JwtAuthenticationFilter # 👈 ¡NUEVO: Nadie altera stock sin Token!
+
+        # --- RUTA PARA PAGOS ---
         - id: payment-service
           uri: lb://payment-service
           predicates:
             - Path=/api/payments/**
+          filters:
+            - JwtAuthenticationFilter # 👈 ¡NUEVO: Nadie paga sin Token!
 
 # Configuración del Disyuntor (Circuit Breaker) para Órdenes
 resilience4j:
