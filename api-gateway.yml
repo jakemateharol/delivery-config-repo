@@ -24,10 +24,15 @@ spring:
           predicates:
             - Path=/api/users/**
 
+        # --- RUTA PARA INVENTARIO ---
         - id: inventory-service
           uri: lb://inventory-service
           predicates:
-            - Path=/api/dishes/**   
+            - Path=/api/dishes/** # 💳 --- NUEVA RUTA PARA PAGOS ---
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payments/**
 
 # Configuración del Disyuntor (Circuit Breaker) para Órdenes
 resilience4j:
