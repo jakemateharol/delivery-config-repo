@@ -30,8 +30,12 @@ spring:
           uri: lb://inventory-service
           predicates:
             - Path=/api/dishes/**
-          filters: # 👈 ¡Listo! Ya bajó a su propia línea y con su sangría correcta
+          filters:
             - JwtAuthenticationFilter
+            - name: CircuitBreaker
+              args:
+                name: inventoryCircuitBreaker
+                fallbackUri: forward:/fallback/dishes
 
         # --- RUTA PARA PAGOS ---
         - id: payment-service
@@ -40,8 +44,12 @@ spring:
             - Path=/api/payments/**
           filters:
             - JwtAuthenticationFilter
+            - name: CircuitBreaker
+              args:
+                name: paymentCircuitBreaker
+                fallbackUri: forward:/fallback/payments
 
-# Configuración del Disyuntor (Circuit Breaker) para Órdenes
+# Configuración Global de Disyuntores (Resilience4j)
 resilience4j:
   circuitbreaker:
     instances:
@@ -49,7 +57,19 @@ resilience4j:
         slidingWindowSize: 6
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
+      inventoryCircuitBreaker:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+      paymentCircuitBreaker:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
   timelimiter:
     instances:
       ordersCircuitBreaker:
+        timeoutDuration: 2s
+      inventoryCircuitBreaker:
+        timeoutDuration: 2s
+      paymentCircuitBreaker:
         timeoutDuration: 2s
