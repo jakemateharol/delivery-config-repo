@@ -52,6 +52,17 @@ spring:
               args:
                 name: paymentCircuitBreaker
                 fallbackUri: forward:/fallback/payments
+         # --- RUTA PARA TRACKING ---
+        - id: tracking-service
+          uri: lb://tracking-service
+          predicates:
+            - Path=/api/tracking/**
+          filters:
+            - JwtAuthenticationFilter
+            - name: CircuitBreaker
+              args:
+                name: trackingCircuitBreaker
+                fallbackUri: forward:/fallback/tracking       
 
 # Configuración Global de Disyuntores (Resilience4j)
 resilience4j:
@@ -69,6 +80,10 @@ resilience4j:
         slidingWindowSize: 6
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
+      trackingCircuitBreaker:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s  
   timelimiter:
     instances:
       ordersCircuitBreaker:
