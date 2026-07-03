@@ -6,7 +6,10 @@ spring:
     name: users-service
 
   datasource:
-    url: jdbc:mysql://localhost:3304/delivery_users_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    # 🔧 CORREGIDO: de localhost:3304 (no válido dentro de un contenedor) a
+    # mysql-db:3306, que es el hostname/puerto real del servicio mysql-db en
+    # docker-compose.
+    url: jdbc:mysql://mysql-db:3306/delivery_users_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -25,7 +28,8 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      # 🔧 CORREGIDO: de localhost a registry-server (hostname del contenedor)
+      defaultZone: http://registry-server:8761/eureka/
 
 # 📊 CONFIGURACIÓN DE OBSERVABILIDAD (ACTUATOR & PROMETHEUS)
 management:
