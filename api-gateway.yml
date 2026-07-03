@@ -1,7 +1,16 @@
+# 🔧 CORREGIDO: se agrega server.port explícito.
+# Antes no estaba aquí y el gateway arrancaba en 8082 (definido en su
+# application.yml local), mientras docker-compose mapeaba 8080:8080 y el
+# frontend apuntaba a http://localhost:8080 -> conexión rechazada.
+server:
+  port: 8080
+
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      # 🔧 CORREGIDO: dentro de docker-compose el hostname del contenedor de
+      # Eureka es "registry-server", no "localhost".
+      defaultZone: http://registry-server:8761/eureka/
 
 spring:
   application:
@@ -11,7 +20,7 @@ spring:
       metrics:
         enabled: true # 👈 Activa métricas globales de rutas del Gateway
 
-      # 🚀 CONFIGURACIÓN GLOBAL DE CORS CORREGIDA (Perfectamente alineada)
+      # 🚀 CONFIGURACIÓN GLOBAL DE CORS
       globalcors:
         cors-configurations:
           '[/**]':
@@ -68,7 +77,7 @@ spring:
                 name: paymentCircuitBreaker
                 fallbackUri: forward:/fallback/payments
 
-         # --- RUTA PARA TRACKING ---
+        # --- RUTA PARA TRACKING ---
         - id: tracking-service
           uri: lb://tracking-service
           predicates:
@@ -78,7 +87,7 @@ spring:
             - name: CircuitBreaker
               args:
                 name: trackingCircuitBreaker
-                fallbackUri: forward:/fallback/tracking       
+                fallbackUri: forward:/fallback/tracking
 
 # Configuración Global de Disyuntores (Resilience4j)
 resilience4j:
@@ -99,7 +108,7 @@ resilience4j:
       trackingCircuitBreaker:
         slidingWindowSize: 6
         failureRateThreshold: 50
-        waitDurationInOpenState: 10s  
+        waitDurationInOpenState: 10s
   timelimiter:
     instances:
       ordersCircuitBreaker:
