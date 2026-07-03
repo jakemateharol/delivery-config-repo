@@ -3,11 +3,12 @@ server:
 
 spring:
   application:
-    name: payment-service # 👈 Agregado para que funcione el balanceador de carga
+    name: payment-service # 👈 Debe coincidir con el lb://payment-service del gateway
   datasource:
-    url: jdbc:mysql://localhost:3304/payments_db_dev?createDatabaseIfNotExist=true
+    # 🔧 CORREGIDO: de localhost:3304 a mysql-db:3306
+    url: jdbc:mysql://mysql-db:3306/payments_db_dev?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: root
-    password: 
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -17,7 +18,8 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      # 🔧 CORREGIDO: de localhost a registry-server
+      defaultZone: http://registry-server:8761/eureka/
 
 # 📊 CONFIGURACIÓN DE OBSERVABILIDAD (ACTUATOR & PROMETHEUS)
 management:
