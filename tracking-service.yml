@@ -4,11 +4,14 @@ server:
 spring:
   application:
     name: tracking-service
+
   datasource:
-    url: jdbc:mysql://localhost:3304/tracking_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    # 🔧 CORREGIDO: de localhost:3304 a mysql-db:3306
+    url: jdbc:mysql://mysql-db:3306/tracking_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,7 +23,8 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      # 🔧 CORREGIDO: de localhost a registry-server
+      defaultZone: http://registry-server:8761/eureka/
 
 management:
   endpoints:
